@@ -4,31 +4,33 @@ import OpenAI from 'openai';
 function Finalproduct({ codeValue, problemValue, selectedLanguageValue }) {
     const [generatedCode, setGeneratedCode] = useState('');
 
-    const openai = new OpenAI({ apiKey: 'Something', dangerouslyAllowBrowser: true});
+    const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true});
 
     useEffect(() => {
         const callAPI = async () => {
-            const stream = await openai.chat.completions.create({
-                model: "gpt-3.5-turbo",
-                messages: [{ role: "system", content: `${codeValue}\n ${problemValue}, how can I fix it using ${selectedLanguageValue}` }],
-                stream: true,
-
-            });
-            console.log('Response Data:', stream.data); // Log the response data
-            const choices = stream.data.choices;
-            if (choices && choices.length > 0) {
-                const generatedCode = choices[0]?.delta?.content || '';
-                setGeneratedCode(generatedCode);
-            } else {
-                console.error('No choices found in the response');
+            try {
+                const stream = await openai.chat.completions.create({
+                    model: "gpt-3.5-turbo",
+                    messages: [{ role: "system", content: `${codeValue}\n ${problemValue}, how can I fix it using ${selectedLanguageValue}` }],
+                    stream: true,
+                });
+                console.log('Stream:', stream); // Log the entire stream object
+                console.log('Response Data:', stream.data); // Log the response data
+                const choices = stream.data.choices;
+                if (choices && choices.length > 0) {
+                    const generatedCode = choices[0]?.delta?.content || '';
+                    setGeneratedCode(generatedCode);
+                } else {
+                    console.error('No choices found in the response');
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
-        }
         };
-
+    
         callAPI();
     }, [codeValue, problemValue, selectedLanguageValue]);
+    
 
     return (
         <div>
@@ -39,3 +41,4 @@ function Finalproduct({ codeValue, problemValue, selectedLanguageValue }) {
 }
 
 export default Finalproduct;
+
