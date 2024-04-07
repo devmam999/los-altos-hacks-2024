@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 function Finalproduct({ codeValue, problemValue, selectedLanguageValue }) {
     const [generatedCode, setGeneratedCode] = useState('');
 
-    const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true});
+    const openai = new OpenAI({ apiKey: 'Something', dangerouslyAllowBrowser: true});
 
     useEffect(() => {
         const callAPI = async () => {
